@@ -1,7 +1,7 @@
 
 # Spreadsheet Application
 
-A lightweight, web-based spreadsheet application hosted on a server, designed for simple data management and calculations. This tool offers essential features like formula support, resizable rows and columns, drag-to-resize functionality, security against invalid inputs, and real-time updates, making it ideal for basic spreadsheet tasks directly in your browser.
+A lightweight, web-based spreadsheet application hosted on a server, designed for simple data management and calculations. This tool offers essential features like formula support, resizable rows and columns, and drag-to-resize functionality, making it ideal for basic spreadsheet tasks directly in your browser.
 
 ![Screenshot 2025-02-28 at 2 47 38 AM](https://github.com/user-attachments/assets/8c8e32d5-dca5-4890-bf94-8c4d9f8b836b)
 
@@ -9,17 +9,7 @@ A lightweight, web-based spreadsheet application hosted on a server, designed fo
 
 Below are practical examples of how to use the spreadsheet:
 
-### 1. Cell Selection and Range Operations
-- **Scenario**: Highlight and analyze a range of sales data.
-- **How to Use**:
-  - Click cell `A1`, type `100`.
-  - Click cell `A2`, type `200`.
-  - Click cell `A3`, type `300`.
-  - Click `A1`, then hold Shift and click `A3` to select the range `A1:A3`.
-  - Type `=SUM(A1:A3)` in cell `A4` and press Enter.
-  - **Result**: Cells `A1` to `A3` are highlighted, and `A4` displays `600` (total sales).
-
-### 2. Basic Data Entry and Summation
+### 1. Basic Data Entry and Summation
 - **Scenario**: Track daily expenses.
 - **How to Use**:
   - Click cell `A1`, type `Day 1`.
@@ -29,7 +19,7 @@ Below are practical examples of how to use the spreadsheet:
   - Click cell `B3`, type `=SUM(B1:B2)` and press Enter.
   - **Result**: Cell `B3` displays `125` (total expenses).
 
-### 3. Resizing Columns for Better Readability
+### 2. Resizing Columns for Better Readability
 - **Scenario**: Adjust column width to fit longer text.
 - **How to Use**:
   - Enter `Monthly Budget Report` in cell `A1`.
@@ -37,7 +27,7 @@ Below are practical examples of how to use the spreadsheet:
   - Click and drag to the right to widen the column.
   - **Result**: The full text `Monthly Budget Report` is visible without truncation.
 
-### 4. Drag to Resize Rows for Notes
+### 3. Drag to Resize Rows for Notes
 - **Scenario**: Make space for detailed notes.
 - **How to Use**:
   - Click cell `C1`, type a long note like `Meeting with team to discuss Q1 goals and projections`.
@@ -45,19 +35,18 @@ Below are practical examples of how to use the spreadsheet:
   - Drag downward to increase the row height.
   - **Result**: The entire note fits comfortably in the cell.
 
-### 5. Calculating Averages
+### 4. Calculating Averages
 - **Scenario**: Average student scores.
 - **How to Use**:
   - Enter scores: `85` in `A1`, `90` in `A2`, `88` in `A3`.
   - Click cell `A4`, type `=AVERAGE(A1:A3)` and press Enter.
   - **Result**: Cell `A4` shows `87.67` (average score).
 
-### 6. Tracking Current Date with Security
-- **Scenario**: Add today’s date safely to a log.
+### 5. Tracking Current Date
+- **Scenario**: Add today’s date to a log.
 - **How to Use**:
   - Click cell `D1`, type `=TODAY()` and press Enter.
-  - Try typing invalid input like `=<script>alert('hack')</script>` in `D2`.
-  - **Result**: Cell `D1` displays the current date (e.g., `2/27/2025`), and `D2` shows `#ERROR` instead of executing harmful code.
+  - **Result**: Cell `D1` displays the current date (e.g., `2/27/2025`).
 
 ## Supported Formulas
 
@@ -66,11 +55,9 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
 - **`SUM(range)`**: Adds all numeric values in a range.
   - Example: `=SUM(A1:A3)` sums values in `A1` to `A3`.
   - ![Screenshot 2025-02-28 at 2 50 02 AM](https://github.com/user-attachments/assets/c4b9c96f-a54f-460f-b4f3-841dd79ee17a)
-
 - **`AVERAGE(range)`**: Calculates the average of numeric values in a range.
   - Example: `=AVERAGE(B1:B5)` averages values in `B1` to `B5`.
   - ![Screenshot 2025-02-28 at 2 53 26 AM](https://github.com/user-attachments/assets/698be154-a551-43b8-b9b9-027f92b14701)
-
 - **`MAX(range)`**: Finds the maximum value in a range.
   - Example: `=MAX(C1:C10)` returns the highest value.
 - **`MIN(range)`**: Finds the minimum value in a range.
@@ -99,12 +86,12 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
 - **Columns**:
   - **How**: Hover over the right edge of any column header (e.g., `A`, `B`) until a resize cursor appears, then drag left or right.
   - **Minimum Width**: 50 pixels.
-  - **Purpose**: Adjust column sizes to fit content like long text, wide numbers, or selected ranges.
+  - **Purpose**: Adjust column sizes to fit content like long text or wide numbers.
 
 - **Rows**:
   - **How**: Hover over the bottom edge of any row number (e.g., `1`, `2`) until a resize cursor appears, then drag up or down.
   - **Minimum Height**: 20 pixels.
-  - **Purpose**: Increase row height for multi-line text, better visibility, or selected ranges.
+  - **Purpose**: Increase row height for multi-line text or better visibility.
 
 ## Drag Features
 
@@ -120,34 +107,24 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
   - Drag to adjust height dynamically.
   - Release to set the new size.
 
-## Security Feature
-
-- **Input Validation**:
-  - **Description**: Protects against malformed or malicious input by sanitizing formula entries.
-  - **How It Works**: Invalid formulas (e.g., attempts to inject scripts like `=<script>alert()</script>`) are caught and displayed as `#ERROR`, preventing execution.
-  - **Purpose**: Ensures the spreadsheet remains safe and functional for all users on the hosted server.
-
-## Other Features
-
-- **Real-Time Recalculation**:
-  - **Description**: Automatically updates formula results when referenced cells change.
-  - **Example**: Change `B1` from `50` to `60` after setting `B3` to `=SUM(B1:B2)`; `B3` instantly updates to `135`.
-
-- **Error Handling in Formulas**:
-  - **Description**: Displays `#ERROR` for invalid formula syntax or calculations.
-  - **Example**: Typing `=SUM(A1:Z)` results in `#ERROR` due to invalid range syntax.
-
 ## Accessing the Application
 
 - **URL**: Visit `<your-hosted-url>` (replace with the actual server URL where the app is hosted).
 - **Requirements**: A modern web browser (Chrome, Firefox, Edge, Safari) with JavaScript enabled.
-- **Interaction**: Simply click cells to start typing, use Shift+click to select ranges, or use the mouse to resize rows and columns.
+- **Interaction**: Simply click cells to start typing, or use the mouse to resize rows and columns.
 
-## Notes
+## Local Development (Optional)
 
-- Formulas are recalculated automatically when referenced cells change.
-- Drag resizing is smooth and responsive, with minimum size limits to prevent collapsing content.
-- Cell selection highlights ranges for easier formula application.
-- Security features protect against invalid or harmful inputs.
-- This is a basic version; advanced features like formatting or multi-sheet support may not be available in this hosted instance.
+To run the application locally from the source code:
+
+1. **Build the Application**:
+   - In the root directory, run:
+     ```bash
+     npm run build
+     ```
+   - This generates the build files in the `dist` directory.
+
+2. **Run Locally**:
+   - Navigate to the `dist` directory.
+   - Open `index.html` in a web browser (e.g., using a local server like `npx serve` for proper module loading).
 
