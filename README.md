@@ -1,14 +1,25 @@
+
 # Spreadsheet Application
 
 A lightweight, web-based spreadsheet application hosted on a server, designed for simple data management and calculations. This tool offers essential features like formula support, resizable rows and columns, and drag-to-resize functionality, making it ideal for basic spreadsheet tasks directly in your browser.
 
-  ![Screenshot 2025-02-28 at 2 47 38 AM](https://github.com/user-attachments/assets/8c8e32d5-dca5-4890-bf94-8c4d9f8b836b)
-  
+![Screenshot 2025-02-28 at 2 47 38 AM](https://github.com/user-attachments/assets/8c8e32d5-dca5-4890-bf94-8c4d9f8b836b)
+
 ## Use Cases
 
 Below are practical examples of how to use the spreadsheet:
 
-### 1. Basic Data Entry and Summation
+### 1. Cell Selection and Range Operations
+- **Scenario**: Highlight and analyze a range of sales data.
+- **How to Use**:
+  - Click cell `A1`, type `100`.
+  - Click cell `A2`, type `200`.
+  - Click cell `A3`, type `300`.
+  - Click `A1`, then hold Shift and click `A3` to select the range `A1:A3`.
+  - Type `=SUM(A1:A3)` in cell `A4` and press Enter.
+  - **Result**: Cells `A1` to `A3` are highlighted, and `A4` displays `600` (total sales).
+
+### 2. Basic Data Entry and Summation
 - **Scenario**: Track daily expenses.
 - **How to Use**:
   - Click cell `A1`, type `Day 1`.
@@ -17,11 +28,8 @@ Below are practical examples of how to use the spreadsheet:
   - Click cell `B2`, type `75` (expense for Day 2).
   - Click cell `B3`, type `=SUM(B1:B2)` and press Enter.
   - **Result**: Cell `B3` displays `125` (total expenses).
- 
 
-
-
-### 2. Resizing Columns for Better Readability
+### 3. Resizing Columns for Better Readability
 - **Scenario**: Adjust column width to fit longer text.
 - **How to Use**:
   - Enter `Monthly Budget Report` in cell `A1`.
@@ -29,7 +37,7 @@ Below are practical examples of how to use the spreadsheet:
   - Click and drag to the right to widen the column.
   - **Result**: The full text `Monthly Budget Report` is visible without truncation.
 
-### 3. Drag to Resize Rows for Notes
+### 4. Drag to Resize Rows for Notes
 - **Scenario**: Make space for detailed notes.
 - **How to Use**:
   - Click cell `C1`, type a long note like `Meeting with team to discuss Q1 goals and projections`.
@@ -37,14 +45,14 @@ Below are practical examples of how to use the spreadsheet:
   - Drag downward to increase the row height.
   - **Result**: The entire note fits comfortably in the cell.
 
-### 4. Calculating Averages
+### 5. Calculating Averages
 - **Scenario**: Average student scores.
 - **How to Use**:
   - Enter scores: `85` in `A1`, `90` in `A2`, `88` in `A3`.
   - Click cell `A4`, type `=AVERAGE(A1:A3)` and press Enter.
   - **Result**: Cell `A4` shows `87.67` (average score).
 
-### 5. Tracking Current Date
+### 6. Tracking Current Date
 - **Scenario**: Add today’s date to a log.
 - **How to Use**:
   - Click cell `D1`, type `=TODAY()` and press Enter.
@@ -56,11 +64,11 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
 
 - **`SUM(range)`**: Adds all numeric values in a range.
   - Example: `=SUM(A1:A3)` sums values in `A1` to `A3`.
- ![Screenshot 2025-02-28 at 2 50 02 AM](https://github.com/user-attachments/assets/c4b9c96f-a54f-460f-b4f3-841dd79ee17a)
+  - ![Screenshot 2025-02-28 at 2 50 02 AM](https://github.com/user-attachments/assets/c4b9c96f-a54f-460f-b4f3-841dd79ee17a)
 
 - **`AVERAGE(range)`**: Calculates the average of numeric values in a range.
   - Example: `=AVERAGE(B1:B5)` averages values in `B1` to `B5`.
-    ![Screenshot 2025-02-28 at 2 53 26 AM](https://github.com/user-attachments/assets/698be154-a551-43b8-b9b9-027f92b14701)
+  - ![Screenshot 2025-02-28 at 2 53 26 AM](https://github.com/user-attachments/assets/698be154-a551-43b8-b9b9-027f92b14701)
 
 - **`MAX(range)`**: Finds the maximum value in a range.
   - Example: `=MAX(C1:C10)` returns the highest value.
@@ -90,17 +98,16 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
 - **Columns**:
   - **How**: Hover over the right edge of any column header (e.g., `A`, `B`) until a resize cursor appears, then drag left or right.
   - **Minimum Width**: 50 pixels.
-  - **Purpose**: Adjust column sizes to fit content like long text or wide numbers.
+  - **Purpose**: Adjust column sizes to fit content like long text or wide numbers or selected ranges.
 
 - **Rows**:
   - **How**: Hover over the bottom edge of any row number (e.g., `1`, `2`) until a resize cursor appears, then drag up or down.
   - **Minimum Height**: 20 pixels.
-  - **Purpose**: Increase row height for multi-line text or better visibility.
+  - **Purpose**: Increase row height for multi-line text, better visibility, or selected ranges.
 
 ## Drag Features
 
 ![Screenshot 2025-02-28 at 2 54 16 AM](https://github.com/user-attachments/assets/8188eaa6-77ec-4506-85e3-4f4b7e62ba8f)
-
 
 - **Column Resizing**:
   - Click and hold the resize handle (small vertical bar) on the right side of a column header.
@@ -111,16 +118,16 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
   - Click and hold the resize handle (small horizontal bar) at the bottom of a row number.
   - Drag to adjust height dynamically.
   - Release to set the new size.
-    
 
 ## Accessing the Application
 
 - **URL**: Visit `<your-hosted-url>` (replace with the actual server URL where the app is hosted).
 - **Requirements**: A modern web browser (Chrome, Firefox, Edge, Safari) with JavaScript enabled.
-- **Interaction**: Simply click cells to start typing, or use the mouse to resize rows and columns.
+- **Interaction**: Simply click cells to start typing, use Shift+click to select ranges, or use the mouse to resize rows and columns.
 
 ## Notes
 
 - Formulas are recalculated automatically when referenced cells change.
 - Drag resizing is smooth and responsive, with minimum size limits to prevent collapsing content.
+- Cell selection highlights ranges for easier formula application.
 - This is a basic version; advanced features like formatting or multi-sheet support may not be available in this hosted instance.
