@@ -1,6 +1,34 @@
 import './style.css'
 import { setupSpreadsheet } from './spreadsheet.js'
 
+// Security utilities
+function sanitizeInput(input) {
+    if (typeof input !== 'string') return '';
+    return input
+        .replace(/[<>&;]/g, '')
+        .trim()
+        .substring(0, 1000);
+}
+
+function generateCsrfToken() {
+    return crypto.getRandomValues(new Uint32Array(1))[0].toString(36) +
+           crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+const csrfToken = generateCsrfToken();
+
 document.querySelector('#app').innerHTML = `
   <div class="spreadsheet-app">
     <div class="app-header">
@@ -133,9 +161,7 @@ document.querySelector('#app').innerHTML = `
           <i class="fa-solid fa-table-cells-large"></i>
         </button>
       </div>
-      
-      <div class="toolbar-divider"></div>
-      
+            
       <div class="toolbar-group">
         <button class="toolbar-button" title="Horizontal align" id="align-left-btn">
           <i class="fa-solid fa-align-left"></i>
@@ -148,11 +174,6 @@ document.querySelector('#app').innerHTML = `
         </button>
       </div>
       
-      <div class="toolbar-group">
-        <button class="toolbar-button" title="Functions">
-          <i class="fa-solid fa-function"></i>
-        </button>
-      </div>
     </div>
     
     <div class="formula-bar">
@@ -184,143 +205,149 @@ const formulaInput = document.getElementById('formula-input')
 const activeCellDisplay = document.getElementById('active-cell')
 
 document.addEventListener('cell-activated', (e) => {
-  const { cellId, value } = e.detail
-  activeCellDisplay.textContent = cellId
-  formulaInput.value = value || ''
+    const { cellId, value } = e.detail;
+    activeCellDisplay.textContent = sanitizeInput(cellId);
+    formulaInput.value = sanitizeInput(value || '');
 })
 
 formulaInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault()
-    const event = new CustomEvent('formula-submitted', {
-      detail: { value: formulaInput.value }
-    })
-    document.dispatchEvent(event)
-  }
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const sanitizedValue = sanitizeInput(formulaInput.value);
+        const event = new CustomEvent('formula-submitted', {
+            detail: { 
+                value: sanitizedValue,
+                csrfToken: csrfToken 
+            }
+        });
+        document.dispatchEvent(event);
+    }
 })
 
-// Toolbar functionality
-document.getElementById('undo-btn').addEventListener('click', () => {
-  spreadsheet.undo()
-})
+// Toolbar functionality with debouncing
+const undoBtnHandler = debounce(() => spreadsheet.undo(), 200);
+document.getElementById('undo-btn').addEventListener('click', undoBtnHandler);
 
-document.getElementById('redo-btn').addEventListener('click', () => {
-  spreadsheet.redo()
-})
+const redoBtnHandler = debounce(() => spreadsheet.redo(), 200);
+document.getElementById('redo-btn').addEventListener('click', redoBtnHandler);
 
-document.getElementById('export-btn').addEventListener('click', () => {
-  const csv = spreadsheet.exportToCSV()
-  const blob = new Blob([csv], { type: 'text/csv' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'spreadsheet.csv'
-  a.click()
-  URL.revokeObjectURL(url)
-})
+const exportBtnHandler = debounce(() => {
+    const csv = spreadsheet.exportToCSV();
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'spreadsheet.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+}, 200);
+document.getElementById('export-btn').addEventListener('click', exportBtnHandler);
 
-document.getElementById('bold-btn').addEventListener('click', () => {
-  spreadsheet.formatSelectedCells({ bold: true })
-})
+const boldBtnHandler = debounce(() => spreadsheet.formatSelectedCells({ bold: true }), 200);
+document.getElementById('bold-btn').addEventListener('click', boldBtnHandler);
 
-document.getElementById('italic-btn').addEventListener('click', () => {
-  spreadsheet.formatSelectedCells({ italic: true })
-})
+const italicBtnHandler = debounce(() => spreadsheet.formatSelectedCells({ italic: true }), 200);
+document.getElementById('italic-btn').addEventListener('click', italicBtnHandler);
 
-document.getElementById('underline-btn').addEventListener('click', () => {
-  spreadsheet.formatSelectedCells({ underline: true })
-})
+const underlineBtnHandler = debounce(() => spreadsheet.formatSelectedCells({ underline: true }), 200);
+document.getElementById('underline-btn').addEventListener('click', underlineBtnHandler);
 
 document.getElementById('font-select').addEventListener('change', (e) => {
-  spreadsheet.formatSelectedCells({ fontFamily: e.target.value })
-})
+    spreadsheet.formatSelectedCells({ fontFamily: sanitizeInput(e.target.value) });
+});
 
 document.getElementById('font-size-select').addEventListener('change', (e) => {
-  spreadsheet.formatSelectedCells({ fontSize: parseInt(e.target.value) })
-})
+    spreadsheet.formatSelectedCells({ fontSize: parseInt(e.target.value) });
+});
 
-document.getElementById('text-color-btn').addEventListener('click', () => {
-  const color = prompt('Enter a color (e.g., #FF0000 or red):')
-  if (color) {
-    spreadsheet.formatSelectedCells({ color })
-  }
-})
+const textColorBtnHandler = debounce(() => {
+    const color = sanitizeInput(prompt('Enter a color (e.g., #FF0000 or red):'));
+    if (color && (/^#[0-9A-F]{6}$/i.test(color) || /^[a-z]+$/i.test(color))) {
+        spreadsheet.formatSelectedCells({ color });
+    }
+}, 200);
+document.getElementById('text-color-btn').addEventListener('click', textColorBtnHandler);
 
-document.getElementById('fill-color-btn').addEventListener('click', () => {
-  const color = prompt('Enter a background color (e.g., #FFFF00 or yellow):')
-  if (color) {
-    spreadsheet.formatSelectedCells({ backgroundColor: color })
-  }
-})
+const fillColorBtnHandler = debounce(() => {
+    const color = sanitizeInput(prompt('Enter a background color (e.g., #FFFF00 or yellow):'));
+    if (color && (/^#[0-9A-F]{6}$/i.test(color) || /^[a-z]+$/i.test(color))) {
+        spreadsheet.formatSelectedCells({ backgroundColor: color });
+    }
+}, 200);
+document.getElementById('fill-color-btn').addEventListener('click', fillColorBtnHandler);
 
-document.getElementById('align-left-btn').addEventListener('click', () => {
-  spreadsheet.formatSelectedCells({ align: 'left' })
-})
+const alignLeftBtnHandler = debounce(() => spreadsheet.formatSelectedCells({ align: 'left' }), 200);
+document.getElementById('align-left-btn').addEventListener('click', alignLeftBtnHandler);
 
-document.getElementById('align-center-btn').addEventListener('click', () => {
-  spreadsheet.formatSelectedCells({ align: 'center' })
-})
+const alignCenterBtnHandler = debounce(() => spreadsheet.formatSelectedCells({ align: 'center' }), 200);
+document.getElementById('align-center-btn').addEventListener('click', alignCenterBtnHandler);
 
 // Find and Replace
-document.querySelector('.menu-item[data-menu="Edit"]').addEventListener('click', () => {
-  const find = prompt('Enter text to find:')
-  const replace = prompt('Enter text to replace with:')
-  if (find && replace !== null) {
-    spreadsheet.findAndReplaceInRange(find, replace)
-  }
-})
+const editMenuHandler = debounce(() => {
+    const find = sanitizeInput(prompt('Enter text to find:'));
+    const replace = sanitizeInput(prompt('Enter text to replace with:'));
+    if (find && replace !== null) {
+        spreadsheet.findAndReplaceInRange(find, replace);
+    }
+}, 200);
+document.querySelector('.menu-item[data-menu="Edit"]').addEventListener('click', editMenuHandler);
 
-// File Menu - Import CSV (keeping export in toolbar)
-const fileMenu = document.querySelector('.menu-item[data-menu="File"]')
-fileMenu.addEventListener('click', () => {
-  const action = prompt('Type "import" to import from CSV:')
-  if (action === 'import') {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.csv'
-    input.addEventListener('change', (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        const reader = new FileReader()
-        reader.onload = (event) => {
-          spreadsheet.importFromCSV(event.target.result)
-        }
-        reader.readAsText(file)
-      }
-    })
-    input.click()
-  }
-})
+// File Menu - Import CSV
+const fileMenu = document.querySelector('.menu-item[data-menu="File"]');
+const fileMenuHandler = debounce(() => {
+    const action = sanitizeInput(prompt('Type "import" to import from CSV:'));
+    if (action === 'import') {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv';
+        input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && file.type === 'text/csv' && file.size < 5 * 1024 * 1024) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const sanitizedCsv = sanitizeInput(event.target.result);
+                    spreadsheet.importFromCSV(sanitizedCsv);
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Please select a valid CSV file under 5MB');
+            }
+        });
+        input.click();
+    }
+}, 200);
+fileMenu.addEventListener('click', fileMenuHandler);
 
 // Sheet Management
-const sheetTabs = document.getElementById('sheet-tabs')
+const sheetTabs = document.getElementById('sheet-tabs');
 
-document.getElementById('add-sheet').addEventListener('click', () => {
-  const sheetName = spreadsheet.addSheet('Sheet')
-  const tab = document.createElement('div')
-  tab.className = 'sheet-tab'
-  tab.dataset.sheet = sheetName
-  tab.textContent = sheetName
-  tab.addEventListener('click', () => switchTab(sheetName))
-  sheetTabs.insertBefore(tab, document.getElementById('add-sheet'))
-  switchTab(sheetName)
-})
+const addSheetHandler = debounce(() => {
+    const sheetName = spreadsheet.addSheet('Sheet');
+    const tab = document.createElement('div');
+    tab.className = 'sheet-tab';
+    tab.dataset.sheet = sheetName;
+    tab.textContent = sheetName;
+    tab.addEventListener('click', () => switchTab(sheetName));
+    sheetTabs.insertBefore(tab, document.getElementById('add-sheet'));
+    switchTab(sheetName);
+}, 200);
+document.getElementById('add-sheet').addEventListener('click', addSheetHandler);
 
 function switchTab(sheetName) {
-  const tabs = sheetTabs.querySelectorAll('.sheet-tab')
-  tabs.forEach(tab => tab.classList.remove('active'))
-  const activeTab = sheetTabs.querySelector(`.sheet-tab[data-sheet="${sheetName}"]`)
-  activeTab.classList.add('active')
-  spreadsheet.switchSheet(sheetName)
+    const tabs = sheetTabs.querySelectorAll('.sheet-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    const activeTab = sheetTabs.querySelector(`.sheet-tab[data-sheet="${sheetName}"]`);
+    activeTab.classList.add('active');
+    spreadsheet.switchSheet(sheetName);
 }
 
-sheetTabs.querySelector('.sheet-tab').addEventListener('click', () => {
-  switchTab('Sheet1')
-})
+const sheetTabHandler = debounce(() => switchTab('Sheet1'), 200);
+sheetTabs.querySelector('.sheet-tab').addEventListener('click', sheetTabHandler);
 
 // Make toolbar buttons interactive
 document.querySelectorAll('.toolbar-button').forEach(button => {
-  button.addEventListener('click', () => {
-    button.classList.toggle('active')
-  })
-})
+    const debouncedClick = debounce(() => {
+        button.classList.toggle('active');
+    }, 200);
+    button.addEventListener('click', debouncedClick);
+});
