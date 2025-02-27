@@ -2,6 +2,8 @@
 
 A lightweight, web-based spreadsheet application hosted on a server, designed for simple data management and calculations. This tool offers essential features like formula support, resizable rows and columns, and drag-to-resize functionality, making it ideal for basic spreadsheet tasks directly in your browser.
 
+  ![Screenshot 2025-02-28 at 2 47 38 AM](https://github.com/user-attachments/assets/8c8e32d5-dca5-4890-bf94-8c4d9f8b836b)
+  
 ## Use Cases
 
 Below are practical examples of how to use the spreadsheet:
@@ -16,7 +18,7 @@ Below are practical examples of how to use the spreadsheet:
   - Click cell `B3`, type `=SUM(B1:B2)` and press Enter.
   - **Result**: Cell `B3` displays `125` (total expenses).
  
-  ![Screenshot 2025-02-28 at 2 47 38 AM](https://github.com/user-attachments/assets/8c8e32d5-dca5-4890-bf94-8c4d9f8b836b)
+
 
 
 ### 2. Resizing Columns for Better Readability
