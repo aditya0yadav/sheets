@@ -15,6 +15,9 @@ Below are practical examples of how to use the spreadsheet:
   - Click cell `B2`, type `75` (expense for Day 2).
   - Click cell `B3`, type `=SUM(B1:B2)` and press Enter.
   - **Result**: Cell `B3` displays `125` (total expenses).
+ 
+  ![Screenshot 2025-02-28 at 2 47 38 AM](https://github.com/user-attachments/assets/8c8e32d5-dca5-4890-bf94-8c4d9f8b836b)
+
 
 ### 2. Resizing Columns for Better Readability
 - **Scenario**: Adjust column width to fit longer text.
@@ -51,8 +54,12 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
 
 - **`SUM(range)`**: Adds all numeric values in a range.
   - Example: `=SUM(A1:A3)` sums values in `A1` to `A3`.
+ ![Screenshot 2025-02-28 at 2 50 02 AM](https://github.com/user-attachments/assets/c4b9c96f-a54f-460f-b4f3-841dd79ee17a)
+
 - **`AVERAGE(range)`**: Calculates the average of numeric values in a range.
   - Example: `=AVERAGE(B1:B5)` averages values in `B1` to `B5`.
+    ![Screenshot 2025-02-28 at 2 53 26 AM](https://github.com/user-attachments/assets/698be154-a551-43b8-b9b9-027f92b14701)
+
 - **`MAX(range)`**: Finds the maximum value in a range.
   - Example: `=MAX(C1:C10)` returns the highest value.
 - **`MIN(range)`**: Finds the minimum value in a range.
@@ -90,6 +97,9 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
 
 ## Drag Features
 
+![Screenshot 2025-02-28 at 2 54 16 AM](https://github.com/user-attachments/assets/8188eaa6-77ec-4506-85e3-4f4b7e62ba8f)
+
+
 - **Column Resizing**:
   - Click and hold the resize handle (small vertical bar) on the right side of a column header.
   - Drag to adjust width dynamically.
@@ -99,6 +109,7 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
   - Click and hold the resize handle (small horizontal bar) at the bottom of a row number.
   - Drag to adjust height dynamically.
   - Release to set the new size.
+    
 
 ## Accessing the Application
 
