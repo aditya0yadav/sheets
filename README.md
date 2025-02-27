@@ -1,7 +1,7 @@
 
 # Spreadsheet Application
 
-A lightweight, web-based spreadsheet application hosted on a server, designed for simple data management and calculations. This tool offers essential features like formula support, resizable rows and columns, and drag-to-resize functionality, making it ideal for basic spreadsheet tasks directly in your browser.
+A lightweight, web-based spreadsheet application hosted on a server, designed for simple data management and calculations. This tool offers essential features like formula support, resizable rows and columns, drag-to-resize functionality, security against invalid inputs, and real-time updates, making it ideal for basic spreadsheet tasks directly in your browser.
 
 ![Screenshot 2025-02-28 at 2 47 38 AM](https://github.com/user-attachments/assets/8c8e32d5-dca5-4890-bf94-8c4d9f8b836b)
 
@@ -52,11 +52,12 @@ Below are practical examples of how to use the spreadsheet:
   - Click cell `A4`, type `=AVERAGE(A1:A3)` and press Enter.
   - **Result**: Cell `A4` shows `87.67` (average score).
 
-### 6. Tracking Current Date
-- **Scenario**: Add today’s date to a log.
+### 6. Tracking Current Date with Security
+- **Scenario**: Add today’s date safely to a log.
 - **How to Use**:
   - Click cell `D1`, type `=TODAY()` and press Enter.
-  - **Result**: Cell `D1` displays the current date (e.g., `2/27/2025`).
+  - Try typing invalid input like `=<script>alert('hack')</script>` in `D2`.
+  - **Result**: Cell `D1` displays the current date (e.g., `2/27/2025`), and `D2` shows `#ERROR` instead of executing harmful code.
 
 ## Supported Formulas
 
@@ -98,7 +99,7 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
 - **Columns**:
   - **How**: Hover over the right edge of any column header (e.g., `A`, `B`) until a resize cursor appears, then drag left or right.
   - **Minimum Width**: 50 pixels.
-  - **Purpose**: Adjust column sizes to fit content like long text or wide numbers or selected ranges.
+  - **Purpose**: Adjust column sizes to fit content like long text, wide numbers, or selected ranges.
 
 - **Rows**:
   - **How**: Hover over the bottom edge of any row number (e.g., `1`, `2`) until a resize cursor appears, then drag up or down.
@@ -119,6 +120,23 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
   - Drag to adjust height dynamically.
   - Release to set the new size.
 
+## Security Feature
+
+- **Input Validation**:
+  - **Description**: Protects against malformed or malicious input by sanitizing formula entries.
+  - **How It Works**: Invalid formulas (e.g., attempts to inject scripts like `=<script>alert()</script>`) are caught and displayed as `#ERROR`, preventing execution.
+  - **Purpose**: Ensures the spreadsheet remains safe and functional for all users on the hosted server.
+
+## Other Features
+
+- **Real-Time Recalculation**:
+  - **Description**: Automatically updates formula results when referenced cells change.
+  - **Example**: Change `B1` from `50` to `60` after setting `B3` to `=SUM(B1:B2)`; `B3` instantly updates to `135`.
+
+- **Error Handling in Formulas**:
+  - **Description**: Displays `#ERROR` for invalid formula syntax or calculations.
+  - **Example**: Typing `=SUM(A1:Z)` results in `#ERROR` due to invalid range syntax.
+
 ## Accessing the Application
 
 - **URL**: Visit `<your-hosted-url>` (replace with the actual server URL where the app is hosted).
@@ -130,4 +148,6 @@ Enter these formulas in a cell starting with `=` to perform calculations or tran
 - Formulas are recalculated automatically when referenced cells change.
 - Drag resizing is smooth and responsive, with minimum size limits to prevent collapsing content.
 - Cell selection highlights ranges for easier formula application.
+- Security features protect against invalid or harmful inputs.
 - This is a basic version; advanced features like formatting or multi-sheet support may not be available in this hosted instance.
+
